@@ -16,11 +16,15 @@ const {
   getOtherOrganizationsIntegration,
   getAuthOrganizations,
   callBackAiAnalyzeCount,
+  organizationRoleChange,
+  getParamsAuthOrganizations,
+  remvoveRoleChange,
 } = require("../controller/organization");
 
 router.route("/").get(getOrganizations);
 router.route("/auth/register").post(protect,authorize("admin","user"),register);
 router.route("/auth").get(protect,authorize("admin","user"),  getAuthOrganizations);
+router.route("/auth/:id").get(protect,authorize("admin","user"),  getParamsAuthOrganizations);
 router.route("/register").post(register);
 router.route("/signin").post(signIn);
 router.route("/update").put(protect, updateOrganizationInfo);
@@ -37,7 +41,13 @@ router
   .put(forgotPassword);
 router
   .route("/change-password")
-  .put(protect, changePassword);
+  .put(protect, changePassword);remvoveRoleChange
+router
+  .route("/controller-change")
+  .put(protect,authorize("admin"), organizationRoleChange);
+router
+  .route("/remove-controller")
+  .put(protect,authorize("admin"), remvoveRoleChange);
 router
   .route("/:id")
   .delete(protect, removeOrganization);

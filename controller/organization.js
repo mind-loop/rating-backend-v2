@@ -149,6 +149,72 @@ exports.getAuthOrganizations = asyncHandler(async (req, res, next) => {
     body: { items: organizations, pagination },
   });
 });
+exports.getParamsAuthOrganizations = asyncHandler(async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 1000;
+  const sort = req.query.sort;
+  let select = req.query.select;
+  const { role } = req;
+  const { id: userId } = req.params;
+  if (select) {
+    select = select
+      .split(" ")
+      .filter(
+        (field) =>
+          !["password", "resetPasswordToken", "resetPasswordExpire"].includes(
+            field
+          )
+      );
+  }
+
+  ["select", "sort", "page", "limit"].forEach((el) => delete req.query[el]);
+
+  const today = new Date();
+
+  // -------------------------------
+  // PRIVATE/GOVERNMENT filter (WHERE)
+  // -------------------------------
+  const whereFilter = {
+    ...req.query,
+    ...({ userId }),
+  };
+  // paginate must count filtered rows!
+  const pagination = await paginate(
+    page,
+    limit,
+    req.db.organization,
+    whereFilter
+  );
+  const query = {
+    offset: pagination.offset,
+    limit,
+    where: whereFilter,
+  };
+
+  if (select?.length) {
+    query.attributes = select;
+  } else {
+    query.attributes = {
+      exclude: ["password", "resetPasswordToken", "resetPasswordExpire"],
+    };
+  }
+
+  if (sort) {
+    query.order = sort
+      .split(" ")
+      .map((el) => [
+        el.charAt(0) === "-" ? el.substring(1) : el,
+        el.charAt(0) === "-" ? "DESC" : "ASC",
+      ]);
+  }
+
+  const organizations = await req.db.organization.findAll(query);
+
+  res.status(200).json({
+    success: true,
+    body: { items: organizations, pagination },
+  });
+});
 exports.getOrganization = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
@@ -217,6 +283,7 @@ exports.signIn = asyncHandler(async (req, res, next) => {
   const user = await req.db.organization.findOne({
     where: { email },
   });
+  console.log(user);
   if (!user) {
     throw new MyError("Таны нэвтрэх нэр эсхүл нууц үг буруу байна", 400);
   }
@@ -230,7 +297,6 @@ exports.signIn = asyncHandler(async (req, res, next) => {
     body: { token: user.getJsonWebToken(), user: user },
   });
 });
-
 exports.organizationInfo = asyncHandler(async (req, res, next) => {
   const { userId } = req;
 
@@ -248,6 +314,57 @@ exports.organizationInfo = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.organizationRoleChange = asyncHandler(async (req, res, next) => {
+  const { organizationId, userId } = req.body;
+  if (!organizationId || !userId) {
+    return res.status(400).json({
+      success: false,
+      message: "Байгууллагын ID болон Хэрэглэгчийн ID заавал шаардлагатай.",
+    });
+  }
+  const organization = await req.db.organization.findByPk(organizationId); // Байгууллага олдсон эсэхийг шалгах.
+
+  if (!organization) {
+    throw new MyError(
+      `ID: ${organizationId} дугаартай байгууллага олдсонгүй.`,
+      404
+    );
+  }
+  const user = await req.db.users.findByPk(userId);
+  if (!user) {
+    throw new MyError(`ID: ${userId} дугаартай хэрэглэгч олдсонгүй.`, 404);
+  }
+  organization.userId = userId; // 💡 Хариуцагчийн ID-г шинэчилж байна
+  await organization.save(); // Мэдээллийн санд хадгалж байна // 6. Амжилттай хариу илгээх.
+  res.status(200).json({
+    success: true,
+    message: `Байгууллага (${organization.business_name})-ын хариуцагчийг ID: ${userId} дугаартай хэрэглэгчээр амжилттай сольлоо.`,
+    body: {
+      organizationId: organization.id,
+      userId: organization.userId,
+    },
+  });
+});
+exports.remvoveRoleChange = asyncHandler(async (req, res, next) => {
+  const { userId } = req;
+  const { organizationId } = req.body;
+  const organization = await req.db.organization.findByPk(organizationId); // Байгууллага олдсон эсэхийг шалгах.
+  if (!organization) {
+    throw new MyError(
+      `ID: ${organizationId} дугаартай байгууллага олдсонгүй.`,
+      404
+    );
+  }
+  organization.userId = userId; // 💡 Хариуцагчийн ID-г шинэчилж байна - админий ID -г олгочихно
+  await organization.save(); // Мэдээллийн санд хадгалж байна // 6. Амжилттай хариу илгээх.
+  res.status(200).json({
+    success: true,
+    message: `Байгууллага (${organization.business_name})-ын хариуцагчийг амжилттай устгалаа.`,
+    body: {
+      organizationId: organization.id,
+    },
+  });
+});
 exports.updateOrganizationInfo = asyncHandler(async (req, res, next) => {
   const { userId, role } = req;
   const { id: paramsId } = req.params;
@@ -509,10 +626,10 @@ exports.getAuthOrganizationAnalytics = asyncHandler(async (req, res) => {
       },
     ],
   });
-  const responseData = await analyzeOrganizations(organizations)
+  const responseData = await analyzeOrganizations(organizations);
   res.status(200).json({
     message: "Success",
-    body: { items:  responseData},
+    body: { items: responseData },
   });
 });
 

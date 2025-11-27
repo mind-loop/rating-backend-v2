@@ -1,0 +1,61 @@
+[
+  { "organizationId": 1, "score": 5, "comment": "Замын чанар сайжирсан нь мэдрэгдэж байна." },
+  { "organizationId": 1, "score": 4, "comment": "Засварын ажлууд цагтаа хийгддэг болсон." },
+  { "organizationId": 1, "score": 3, "comment": "Мэдээлэл дутмаг санагдсан." },
+  { "organizationId": 1, "score": 2, "comment": "Гомдлын шийдвэр удаан байна." },
+  { "organizationId": 1, "score": 1, "comment": "Дуудлагад бараг хариулдаггүй." },
+
+  { "organizationId": 2, "score": 5, "comment": "Салбарын бодлого маш сайн тодорхойлогдсон." },
+  { "organizationId": 2, "score": 4, "comment": "Мэдээлэл ил тод болсон." },
+  { "organizationId": 2, "score": 3, "comment": "Сайжруулах зүйл байсаар байна." },
+  { "organizationId": 2, "score": 2, "comment": "Холбогдох байгууллагуудын уялдаа муу." },
+  { "organizationId": 2, "score": 1, "comment": "Иргэдийн саналыг тоодоггүй." },
+
+  { "organizationId": 3, "score": 5, "comment": "Аюулгүй байдлыг сайн хангаж байна." },
+  { "organizationId": 3, "score": 4, "comment": "Алба хаагчид илүү соёлтой болсон." },
+  { "organizationId": 3, "score": 3, "comment": "Зарим үед хариу удаан." },
+  { "organizationId": 3, "score": 2, "comment": "Хандлага муутай алба хаагч тааралддаг." },
+  { "organizationId": 3, "score": 1, "comment": "Гомдол бараг шийдэгддэггүй." },
+
+  { "organizationId": 4, "score": 5, "comment": "Эмнэлгийн орчин сайжирч байна." },
+  { "organizationId": 4, "score": 4, "comment": "Тоног төхөөрөмж шинэ болсон." },
+  { "organizationId": 4, "score": 3, "comment": "Хүлээлгийн хугацаа урт." },
+  { "organizationId": 4, "score": 2, "comment": "Ажилчдын тоо хүрэлцэхгүй." },
+  { "organizationId": 4, "score": 1, "comment": "Иргэдэд ээлтэй бус." },
+
+  { "organizationId": 5, "score": 5, "comment": "Боловсролын шинэчлэл амжилттай." },
+  { "organizationId": 5, "score": 4, "comment": "Сургалтын чанар дээшилсэн." },
+  { "organizationId": 5, "score": 3, "comment": "Сургалтын ачаалал их." },
+  { "organizationId": 5, "score": 2, "comment": "Орон нутагт дэмжлэг сул." },
+  { "organizationId": 5, "score": 1, "comment": "Бодлого тогтворгүй." },
+
+  { "organizationId": 6, "score": 5, "comment": "Аялал үнэхээр гоё болсон." },
+  { "organizationId": 6, "score": 4, "comment": "Зөвлөгөө маш сайн өгсөн." },
+  { "organizationId": 6, "score": 3, "comment": "Үнийн мэдээлэл тодорхой биш." },
+  { "organizationId": 6, "score": 2, "comment": "Холбоо барих төвөгтэй." },
+  { "organizationId": 6, "score": 1, "comment": "Захиалга гэнэт цуцалсан." },
+
+  { "organizationId": 7, "score": 5, "comment": "Найдвартай ханган нийлүүлэлттэй." },
+  { "organizationId": 7, "score": 4, "comment": "Аюулгүй ажиллагаа сайн." },
+  { "organizationId": 7, "score": 3, "comment": "Сайжруулах орон зай бий." },
+  { "organizationId": 7, "score": 2, "comment": "Хариу өгөх удаан." },
+  { "organizationId": 7, "score": 1, "comment": "Мэдээлэл хаалттай." },
+
+  { "organizationId": 8, "score": 5, "comment": "Дэлгүүр олон, тохилог." },
+  { "organizationId": 8, "score": 4, "comment": "Аюулгүй байдал сайн." },
+  { "organizationId": 8, "score": 3, "comment": "Зогсоол багтаамж муу." },
+  { "organizationId": 8, "score": 2, "comment": "Ажилтнуудын харилцаа тааруухан." },
+  { "organizationId": 8, "score": 1, "comment": "Цэвэрлэгээ хангалтгүй." },
+
+  { "organizationId": 9, "score": 5, "comment": "Маш мэргэжлийн баг." },
+  { "organizationId": 9, "score": 4, "comment": "Төслийг хугацаанд нь хийсэн." },
+  { "organizationId": 9, "score": 3, "comment": "Холболт заримдаа тасардаг." },
+  { "organizationId": 9, "score": 2, "comment": "Дэмжлэг сул." },
+  { "organizationId": 9, "score": 1, "comment": "Хариу их удаж ирдэг." },
+
+  { "organizationId": 10, "score": 5, "comment": "Үйлчилгээний чанар өндөр." },
+  { "organizationId": 10, "score": 4, "comment": "Сонголт өргөн." },
+  { "organizationId": 10, "score": 3, "comment": "Үнэ арай өндөр." },
+  { "organizationId": 10, "score": 2, "comment": "Зарим салбарын үйлчилгээ тааруу." },
+  { "organizationId": 10, "score": 1, "comment": "Үйлчилгээ тасалдсан." }
+]

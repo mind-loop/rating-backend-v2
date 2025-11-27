@@ -14,6 +14,7 @@ const userRoutes = require("./routes/users")
 const feedbackRoutes = require("./routes/rating")
 const OpenAiRoutes = require("./routes/openai.js")
 const paymentRoutes = require("./routes/payment")
+const dashboardRoutes = require("./routes/dashboard.js");
 const merchantRoutes = require("./routes/merchant");
 const injectDb = require("./middleware/injectDb");
 const cors = require("cors");
@@ -36,6 +37,7 @@ app.use("/api/v1/organization", organizationRoutes);
 app.use("/api/v1/rating", feedbackRoutes);
 app.use("/api/v1/ai", OpenAiRoutes);
 
+app.use("/api/v1/dashboard",dashboardRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/merchant", merchantRoutes);
 app.use("/api/v1", successRoutes);
