@@ -201,8 +201,8 @@ exports.getInvoiceQpay = asyncHandler(async (req, res, next) => {
       ]);
   }
   const invoice = await req.db.invoice.findAll(query);
-  res.status(200).json({
+    res.status(200).json({
     success: true,
-    items: invoice,
+    body: { items: invoice, pagination },
   });
 })
