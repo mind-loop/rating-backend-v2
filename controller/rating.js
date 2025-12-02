@@ -118,11 +118,7 @@ exports.getAnalyzeRate = asyncHandler(async (req, res, next) => {
   // Response буцаах
   res.status(200).json({
     message: "Success (:",
-    body: {
-      success: true,
-      remaining_count: organization.ai_analize_count,
-      items: analysis,
-    },
+    body: analysis,
   });
 });
 exports.getOrganizationAnalytics = asyncHandler(async (req, res) => {

@@ -3,9 +3,9 @@ const router = express.Router();
 router.route("/").get((req, res) => {
   res.status(200).json({
     message: {
-      version: "v2.0.3",
+      version: "v2.0.4",
       message: "QPAY амжилттай холбогдлоо.",
-      date: "2025-12-01"
+      date: "2025-12-02"
     },
     success: true,
   });
