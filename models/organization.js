@@ -59,6 +59,7 @@ module.exports = function (sequelize, DataTypes) {
       expired_date: {
         type: DataTypes.DATE,
         allowNull: true, // Null for Government organizations
+        defaultValue: DataTypes.NOW,
       },
       // Байгууллагын мэдээлэл
       business_name: {

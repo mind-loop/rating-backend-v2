@@ -243,9 +243,11 @@ exports.register = asyncHandler(async (req, res, next) => {
   };
 
   // 2. Өгөгдлийг үүсгэх
+  const expiredDate = new Date();
+expiredDate.setDate(expiredDate.getDate() + 7);
+
   const organization = await req.db.organization.create({
-    ...organizationData,
-    expired_date: new Date().toISOString(),
+    ...organizationData
   });
 
   if (!organization) {
