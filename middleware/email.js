@@ -1,7 +1,7 @@
 import axios from "axios";
 import MyError from "../utils/myError.js"; // өөрийн MyError класс
 
-const CDN_URL = process.env.CDN_URL || "https://cdn.itwork.mn/api";
+const CDN_URL = "https://cdn.itwork.mn/api";
 
 export const sendHtmlEmail = async (emailBody) => {
     try {
