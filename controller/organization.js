@@ -395,10 +395,6 @@ exports.updateOrganizationInfo = asyncHandler(async (req, res, next) => {
 });
 
 exports.removeOrganization = asyncHandler(async (req, res, next) => {
-  const { type } = req;
-  if (type != "user") {
-    throw new MyError("Та бүртгэх эрхгүй байна", 501);
-  }
   const userId = req.params.id;
   const organization = await req.db.organization.findByPk(userId);
   if (!organization) {
