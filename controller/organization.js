@@ -395,15 +395,11 @@ exports.updateOrganizationInfo = asyncHandler(async (req, res, next) => {
 });
 
 exports.removeOrganization = asyncHandler(async (req, res, next) => {
-  const { type } = req;
-  if (type != "user") {
-    throw new MyError("Та бүртгэх эрхгүй байна", 501);
-  }
-  const userId = req.params.id;
-  const organization = await req.db.organization.findByPk(userId);
+  const id = req.params.id;
+  const organization = await req.db.organization.findByPk(id);
   if (!organization) {
     throw new MyError(
-      `Таны устгах гэсэн ${userId} дугаартай байгууллагын мэдээлэл олдсонгүй`,
+      `Таны устгах гэсэн ${id} дугаартай байгууллагын мэдээлэл олдсонгүй`,
       404
     );
   }
