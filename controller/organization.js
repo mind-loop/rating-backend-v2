@@ -176,7 +176,7 @@ exports.getParamsAuthOrganizations = asyncHandler(async (req, res, next) => {
   // -------------------------------
   const whereFilter = {
     ...req.query,
-    ...({ userId }),
+    ...{ userId },
   };
   // paginate must count filtered rows!
   const pagination = await paginate(
@@ -244,10 +244,10 @@ exports.register = asyncHandler(async (req, res, next) => {
 
   // 2. Өгөгдлийг үүсгэх
   const expiredDate = new Date();
-expiredDate.setDate(expiredDate.getDate() + 7);
+  expiredDate.setDate(expiredDate.getDate() + 7);
 
   const organization = await req.db.organization.create({
-    ...organizationData
+    ...organizationData,
   });
 
   if (!organization) {
@@ -512,6 +512,7 @@ exports.callBackExpireDue = asyncHandler(async (req, res, next) => {
     price_type,
     ai_analize_count = 0,
     integrationId,
+    uniq_generate_id,
   } = req.query;
 
   // 1. Validate duration
@@ -524,7 +525,9 @@ exports.callBackExpireDue = asyncHandler(async (req, res, next) => {
       message: "Хугацаа 1, 3, 6 эсвэл 12 сар байна.",
     });
   }
-
+  if (!uniq_generate_id) {
+    throw new MyError("uniq_generate_id заавал шаардлагатай", 400);
+  }
   // 2. Find organization with BOTH id and integrationId
   const organization = await req.db.organization.findOne({
     where: {
@@ -533,9 +536,17 @@ exports.callBackExpireDue = asyncHandler(async (req, res, next) => {
     },
   });
 
+  const invoice = await req.db.invoice.findOne({
+    where: { uniq_generate_id },
+  });
+
+  if (invoice) {
+    await invoice.update({ status: "paid" });
+  }
   if (!organization) {
     throw new MyError("Байгууллага олдсонгүй", 404);
   }
+
   // 4. Determine base date (correct logic)
   let baseDate = organization.expired_date
     ? new Date(organization.expired_date)
@@ -571,7 +582,11 @@ exports.callBackExpireDue = asyncHandler(async (req, res, next) => {
 });
 exports.callBackAiAnalyzeCount = asyncHandler(async (req, res, next) => {
   const organizationId = req.params.id;
-  const { integrationId, ai_analize_count } = req.query;
+  const { integrationId, ai_analize_count , uniq_generate_id} = req.query;
+  
+  if (!uniq_generate_id) {
+    throw new MyError("uniq_generate_id заавал шаардлагатай", 400);
+  }
   // 2. Find organization with BOTH id and integrationId
   const organization = await req.db.organization.findOne({
     where: {
@@ -588,6 +603,13 @@ exports.callBackAiAnalyzeCount = asyncHandler(async (req, res, next) => {
   organization.ai_analize_count = oldCount + Number(ai_analize_count);
   await organization.save();
 
+  const invoice = await req.db.invoice.findOne({
+    where: { uniq_generate_id },
+  });
+
+  if (invoice) {
+    await invoice.update({ status: "paid" });
+  }
   // 8. Response
   res.status(200).json({
     body: {
