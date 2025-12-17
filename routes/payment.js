@@ -32,7 +32,7 @@ router
   .post(protect, authorize("admin"), newCustomPaid);
 router
   .route("/qpay-invoice/:invoice_id")
-  .delete(protect, authorize("admin"), deleteInvoice)
+  .delete(protect, deleteInvoice)
   .get(protect, getInvoice);
 
 module.exports = router;

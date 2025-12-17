@@ -9,6 +9,7 @@ const { generatePayment, calculateNewExpiry } = require("../utils/common");
 const paginate = require("../utils/paginate-sequelize");
 const { parse } = require("path");
 const { includes } = require("lodash");
+const { Op } = require("sequelize");
 dotenv.config({ path: "./config/config.env" });
 const username = process.env.QPAY_USERNAME;
 const password = process.env.QPAY_PASSWORD;
@@ -41,15 +42,16 @@ const getToken = async (
   return response.data.access_token;
 };
 exports.deleteInvoice = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+  const { invoice_id } = req.params;
   const invoice = await req.db.invoice.findOne({
     where: {
-      id,
+      invoice_id,
+      status: { [Op.ne]: "paid" },
     },
   });
   if (!invoice) {
     throw new MyError(
-      `Таны устгах гэсэн ${id} дугаартай мэдээлэл олдсонгүй`,
+      `Таны устгах гэсэн ${invoice_id} дугаартай мэдээлэл олдсонгүй`,
       404
     );
   }
@@ -207,7 +209,7 @@ exports.newExpireOrganizationInvoiceQpay = asyncHandler(
       callback_url,
       payment_type: "QPAY",
       uniq_generate_id,
-      organizationId
+      organizationId,
     });
     if (!invoice_res) {
       throw new MyError(`invoice үүссэнгүй байна ..`, 400);
@@ -254,7 +256,7 @@ exports.newInvoiceAiAnaliticsCouponInvoiceQpay = asyncHandler(
         sender_branch_code: SENDER_BRANCH_CODE,
         amount: amount,
         callback_url,
-        organizationId
+        organizationId,
       },
       {
         headers: {
