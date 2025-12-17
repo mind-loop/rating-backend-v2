@@ -47,6 +47,13 @@ module.exports = function (sequelize, DataTypes) {
           },
         },
       },
+      organizationId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        references: {
+          model: "organization",
+          key: "id",
+        },
+      },
     },
     {
       tableName: "invoice",

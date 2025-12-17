@@ -127,7 +127,7 @@ exports.calculateNewExpiry= (currentDate, duration) => {
             break;
         default:
             // Default to 1 month if an invalid duration is provided
-            newDate.setMonth(newDate.getMonth() + 1);
+            newDate.setMonth(newDate.getMonth() + duration);
     }
     return newDate;
 };

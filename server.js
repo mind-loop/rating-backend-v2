@@ -46,6 +46,9 @@ app.use(errorHandler);
 // user to departments - one to many
 db.organization.hasMany(db.ratings, { foreignkey: "organizationId", as: "ratings" });
 db.ratings.belongsTo(db.organization, { foreignKey: "organizationId", as: "organization" });
+// user to departments - one to many
+db.organization.hasMany(db.invoice, { foreignkey: "organizationId", as: "invoices" });
+db.invoice.belongsTo(db.organization, { foreignKey: "organizationId", as: "organization" });
 // Sync models
 db.sequelize
   .sync()
