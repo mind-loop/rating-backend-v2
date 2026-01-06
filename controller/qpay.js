@@ -278,6 +278,7 @@ exports.newInvoiceAiAnaliticsCouponInvoiceQpay = asyncHandler(
       callback_url,
       payment_type: "QPAY",
       uniq_generate_id,
+      organizationId,
     });
     if (!invoice_res) {
       throw new MyError(`invoice үүссэнгүй байна ..`, 400);
