@@ -7,7 +7,7 @@ exports.getOrganizationsRate = asyncHandler(async (req, res, next) => {
   const { page = 1, limit = 1000, sort, select, ...filters } = req.query;
   ["select", "sort", "page", "limit"].forEach((el) => delete req.query[el]);
 
-  const where = { ...filters};
+  const where = { ...filters };
 
   const pagination = await paginate(page, limit, req.db.ratings);
 
@@ -60,13 +60,13 @@ exports.getOrganizationRate = asyncHandler(async (req, res, next) => {
   }
 
   ["select", "sort", "page", "limit"].forEach((el) => delete req.query[el]);
-const where = { ...req.query, organizationId };
-  const pagination = await paginate(page, limit, req.db.ratings,where);
+  const where = { ...req.query, organizationId };
+  const pagination = await paginate(page, limit, req.db.ratings, where);
 
   let query = { offset: pagination.start - 1, limit };
 
   if (req.query) {
-    query.where = where
+    query.where = where;
   }
 
   if (select) {
@@ -94,21 +94,21 @@ const where = { ...req.query, organizationId };
 });
 
 exports.getAnalyzeRate = asyncHandler(async (req, res, next) => {
-  const {ratings} = req.body;
-    const organizationId = req.params.id;
-  if(ratings.length===0){
+  const { ratings } = req.body;
+  const organizationId = req.params.id;
+  if (ratings.length === 0) {
     throw new MyError("Ratings not found", 404);
   }
-  
-      // Organization-г олох
+
+  // Organization-г олох
   const organization = await req.db.organization.findByPk(organizationId);
   if (!organization) {
     throw new MyError("Organization олдсонгүй.", 404);
   }
-    if (organization.ai_analize_count <= 0) {
+  if (organization.ai_analize_count <= 0) {
     throw new MyError(
       "Анализ хийх боломжгүй. Таны сэтгэгдэл боловсруулах эрх дууслаа.",
-      400
+      400,
     );
   }
   const analysis = await generateRateAnalyze(ratings);
@@ -136,7 +136,6 @@ exports.getOrganizationAnalytics = asyncHandler(async (req, res) => {
 
   res.status(200).json({ data });
 });
-
 
 exports.ratingRemove = asyncHandler(async (req, res, next) => {
   const { role } = req;
@@ -209,7 +208,7 @@ exports.createRatings = asyncHandler(async (req, res, next) => {
     },
     {
       where: { id: organizationId },
-    }
+    },
   );
 
   // 4. Хариу буцаах
@@ -219,46 +218,51 @@ exports.createRatings = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.createAIAnalyzeRatings = asyncHandler(async (req, res, next) => {
-  const { organizationId } = req.body;
+exports.createAIAnalyzeRatings = asyncHandler(async (req, res) => {
+  const { organizationId, comment, score } = req.body;
+
+  // 1. Validation
   if (!organizationId) {
-    throw new MyError("Not Found Organization", 404);
+    throw new MyError("Organization not found", 404);
   }
-  if(!req.body.comment){
-    throw new MyError("Comment not found",400);
-  }
-  // 1. AI боловсруулалт хийх
-  const analysis = await generateFinalText(req.body.comment);
 
-  // 2. Үнэлгээг хадгалах
-  await req.db.ratings.create({...req.body, comment: analysis});
+  // 2. Comment байгаа бол AI анализ хийх
+  const trimmedComment = comment?.trim();
+  const analyzedComment = trimmedComment
+    ? await generateFinalText(trimmedComment)
+    : null;
 
-  // 3. Тухайн байгууллагын бүх үнэлгээг авч, дундаж ба нийт тооцоолох
+  // 3. Үнэлгээг хадгалах
+  await req.db.ratings.create({
+    organizationId,
+    score,
+    comment: analyzedComment, // null бол DB ignore / allow null
+  });
+
+  // 4. Байгууллагын үнэлгээний статистик
   const ratings = await req.db.ratings.findAll({
     where: { organizationId },
     attributes: ["score"],
   });
 
   const totalRatings = ratings.length;
-  const averageRating =
-    totalRatings > 0
-      ? ratings.reduce((acc, r) => acc + r.score, 0) / totalRatings
-      : 0;
+  const averageRating = totalRatings
+    ? ratings.reduce((sum, r) => sum + r.score, 0) / totalRatings
+    : 0;
 
-  // 4. Байгууллагын мэдээлэл шинэчлэх
+  // 5. Байгууллагын мэдээлэл шинэчлэх
   await req.db.organization.update(
     {
-      averageRating: parseFloat(averageRating.toFixed(1)),
       totalRatings,
+      averageRating: Number(averageRating.toFixed(1)),
     },
-    {
-      where: { id: organizationId },
-    }
+    { where: { id: organizationId } }
   );
 
-  // 4. Хариу буцаах
+  // 6. Response
   res.status(200).json({
-    message: "Feedback AI амжилттай илгээгдлээ!",
-    body: { success: true,analysis },
+    success: true,
+    message: "Feedback амжилттай илгээгдлээ!",
   });
 });
+
