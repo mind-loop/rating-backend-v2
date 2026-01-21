@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const asyncHandler = require("../middleware/asyncHandle");
 const MyError = require("../utils/myError");
 const paginate = require("../utils/paginate-sequelize");
-const { generateRateAnalyze } = require("../middleware/ai");
+const { generateRateAnalyze, generateFinalText } = require("../middleware/ai");
 exports.getOrganizationsRate = asyncHandler(async (req, res, next) => {
   const { page = 1, limit = 1000, sort, select, ...filters } = req.query;
   ["select", "sort", "page", "limit"].forEach((el) => delete req.query[el]);
@@ -216,5 +216,49 @@ exports.createRatings = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Feedback амжилттай илгээгдлээ!",
     body: { success: true },
+  });
+});
+
+exports.createAIAnalyzeRatings = asyncHandler(async (req, res, next) => {
+  const { organizationId } = req.body;
+  if (!organizationId) {
+    throw new MyError("Not Found Organization", 404);
+  }
+  if(!req.body.comment){
+    throw new MyError("Comment not found",400);
+  }
+  // 1. AI боловсруулалт хийх
+  const analysis = await generateFinalText(req.body.comment);
+
+  // 2. Үнэлгээг хадгалах
+  await req.db.ratings.create({...req.body, comment: analysis});
+
+  // 3. Тухайн байгууллагын бүх үнэлгээг авч, дундаж ба нийт тооцоолох
+  const ratings = await req.db.ratings.findAll({
+    where: { organizationId },
+    attributes: ["score"],
+  });
+
+  const totalRatings = ratings.length;
+  const averageRating =
+    totalRatings > 0
+      ? ratings.reduce((acc, r) => acc + r.score, 0) / totalRatings
+      : 0;
+
+  // 4. Байгууллагын мэдээлэл шинэчлэх
+  await req.db.organization.update(
+    {
+      averageRating: parseFloat(averageRating.toFixed(1)),
+      totalRatings,
+    },
+    {
+      where: { id: organizationId },
+    }
+  );
+
+  // 4. Хариу буцаах
+  res.status(200).json({
+    message: "Feedback AI амжилттай илгээгдлээ!",
+    body: { success: true,analysis },
   });
 });
