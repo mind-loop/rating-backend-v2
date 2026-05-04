@@ -328,7 +328,6 @@ exports.getInvoiceQpay = asyncHandler(async (req, res, next) => {
 });
 
 // new Custom Invoice and paid changing
-// new Custom Invoice and paid changing
 exports.newCustomPaid = asyncHandler(async (req, res, next) => {
   // invoice_id-г body-оос заавал авна
   const {
@@ -383,7 +382,7 @@ exports.newCustomPaid = asyncHandler(async (req, res, next) => {
     // Хэрэв хугацаа нь дуусаагүй байвал одоо байгаа дээр нь нэмнэ, дууссан бол өнөөдрөөс
     const baseDate =
       organization.expired_date &&
-      new Date(organization.expired_date) > new Date()
+        new Date(organization.expired_date) > new Date()
         ? new Date(organization.expired_date)
         : new Date();
 

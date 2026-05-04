@@ -265,9 +265,9 @@ exports.changePassword = asyncHandler(async (req, res, next) => {
   }
 
   const { oldPassword, new_password } = req.body;
-  if (!oldPassword || !new_password) {
-    throw new MyError("Хуучин болон шинэ нууц үг шаардлагатай", 400);
-  }
+if (!oldPassword || !new_password) {
+  throw new MyError("Хуучин болон шинэ нууц үг шаардлагатай", 400);
+}
 
   // 1️⃣ User-г олж авах
   const user = await req.db.users.findByPk(userId);

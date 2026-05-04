@@ -9,7 +9,6 @@ const { sendHtmlEmail } = require("../middleware/email");
 const asyncHandler = require("../middleware/asyncHandle");
 const { Sequelize } = require("sequelize");
 const {
-  analyzeOrganization,
   analyzeOrganizations,
 } = require("../middleware/ai");
 exports.getOrganizations = asyncHandler(async (req, res, next) => {
