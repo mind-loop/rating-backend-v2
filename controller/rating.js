@@ -45,9 +45,11 @@ exports.getOrganizationsRate = asyncHandler(async (req, res, next) => {
 
 exports.getOrganizationRate = asyncHandler(async (req, res, next) => {
   const { role } = req;
-  let organizationId = req.params.id;
-  if (!role == "admin" || !role == "user") {
-    throw new MyError("Filter not found", 501);
+  const organizationId = req.params.id;
+
+  // Role шалгах логикийг зассан: Хэрэв admin болон user-ийн аль нь ч биш бол алдаа шиднэ
+  if (role !== "admin" && role !== "user") {
+    throw new MyError("Хандах эрхгүй эсвэл шүүлтүүр олдсонгүй", 403);
   }
 
   const page = parseInt(req.query.page) || 1;
@@ -59,15 +61,21 @@ exports.getOrganizationRate = asyncHandler(async (req, res, next) => {
     select = select.split(" ");
   }
 
+  // Query-гээс тусгай түлхүүр үгсийг устгах
   ["select", "sort", "page", "limit"].forEach((el) => delete req.query[el]);
+
+  // Хайлтын нөхцөлд organizationId-г нэмэх
   const where = { ...req.query, organizationId };
+
+  // Хуудаслалт тооцох
   const pagination = await paginate(page, limit, req.db.ratings, where);
 
-  let query = { offset: pagination.start - 1, limit };
-
-  if (req.query) {
-    query.where = where;
-  }
+  // Sequelize query объект бэлдэх
+  let query = { 
+    offset: Math.max(0, (pagination.start || 1) - 1), 
+    limit,
+    where: where 
+  };
 
   if (select) {
     query.attributes = select;
@@ -82,13 +90,16 @@ exports.getOrganizationRate = asyncHandler(async (req, res, next) => {
       ]);
   }
 
+  // Өгөгдлийн сангаас хайх
   const ratings = await req.db.ratings.findAll(query);
+
+  // Мэдээлэл байхгүй байсан ч success: true, items: [] гэж буцаана
   res.status(200).json({
     message: "Success (:",
     body: {
       success: true,
-      items: ratings,
-      pagination,
+      items: ratings || [], // Дата олдохгүй бол хоосон массив
+      pagination: pagination || { total: 0, pageCount: 0, start: 0, limit }
     },
   });
 });
@@ -111,15 +122,22 @@ exports.getAnalyzeRate = asyncHandler(async (req, res, next) => {
       400,
     );
   }
-  const analysis = await generateRateAnalyze(ratings);
   // 1 оноо хасах
   organization.ai_analize_count -= 1;
   await organization.save();
-  // Response буцаах
-  res.status(200).json({
-    message: "Success (:",
-    body: analysis,
-  });
+  try {
+    const analysis = await generateRateAnalyze(ratings);
+    res.status(200).json({
+      success: true,
+      body: analysis
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "AI боловсруулалт амжилтгүй боллоо.",
+      error: error.message
+    });
+  }
 });
 exports.getOrganizationAnalytics = asyncHandler(async (req, res) => {
   const { organizationIds, startDate, endDate } = req.body;

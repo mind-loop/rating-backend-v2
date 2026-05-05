@@ -41,8 +41,9 @@ app.use("/api/v1/dashboard",dashboardRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/merchant", merchantRoutes);
 app.use("/api/v1", successRoutes);
-app.use(errorHandler);
 
+app.use(errorHandler);
+const runSeed = require("./seed/seed");
 // user to departments - one to many
 db.organization.hasMany(db.ratings, { foreignkey: "organizationId", as: "ratings" });
 db.ratings.belongsTo(db.organization, { foreignKey: "organizationId", as: "organization" });
@@ -52,7 +53,8 @@ db.invoice.belongsTo(db.organization, { foreignKey: "organizationId", as: "organ
 // Sync models
 db.sequelize
   .sync()
-  .then((result) => {
+  .then(async (result) => {
+    // await runSeed(db);
     console.log("sync hiigdlee...");
   })
   .catch((err) => console.log(err));

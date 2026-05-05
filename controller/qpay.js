@@ -294,15 +294,21 @@ exports.getInvoiceQpay = asyncHandler(async (req, res, next) => {
   const limit = parseInt(req.query.limit) || 1000;
   const sort = req.query.sort;
   let select = req.query.select;
+
   if (select) {
     select = select.split(" ");
   }
 
+  // Query-г цэвэрлэх
   ["select", "sort", "page", "limit"].forEach((el) => delete req.query[el]);
 
+  // Хуудаслалт тооцох
   const pagination = await paginate(page, limit, req.db.invoice);
 
-  let query = { offset: pagination.start - 1, limit };
+  let query = { 
+    offset: Math.max(0, pagination.start - 1), // Сөрөг утга гарахаас сэргийлнэ
+    limit 
+  };
 
   if (req.query) {
     query.where = req.query;
@@ -320,10 +326,22 @@ exports.getInvoiceQpay = asyncHandler(async (req, res, next) => {
         el.charAt(0) === "-" ? "DESC" : "ASC",
       ]);
   }
+
+  // Нэхэмжлэхүүдийг хайх
   const invoice = await req.db.invoice.findAll(query);
+
+  // Хэрэв invoice нь null эсвэл undefined байвал хоосон массив буцаахыг баталгаажуулна
   res.status(200).json({
     success: true,
-    body: { items: invoice, pagination },
+    body: { 
+      items: invoice || [], 
+      pagination: pagination || {
+        total: 0,
+        pageCount: 0,
+        start: 0,
+        limit: limit
+      }
+    },
   });
 });
 

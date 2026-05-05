@@ -1,61 +1,852 @@
 [
-  { "organizationId": 1, "score": 5, "comment": "Замын чанар сайжирсан нь мэдрэгдэж байна." },
-  { "organizationId": 1, "score": 4, "comment": "Засварын ажлууд цагтаа хийгддэг болсон." },
-  { "organizationId": 1, "score": 3, "comment": "Мэдээлэл дутмаг санагдсан." },
-  { "organizationId": 1, "score": 2, "comment": "Гомдлын шийдвэр удаан байна." },
-  { "organizationId": 1, "score": 1, "comment": "Дуудлагад бараг хариулдаггүй." },
-
-  { "organizationId": 2, "score": 5, "comment": "Салбарын бодлого маш сайн тодорхойлогдсон." },
-  { "organizationId": 2, "score": 4, "comment": "Мэдээлэл ил тод болсон." },
-  { "organizationId": 2, "score": 3, "comment": "Сайжруулах зүйл байсаар байна." },
-  { "organizationId": 2, "score": 2, "comment": "Холбогдох байгууллагуудын уялдаа муу." },
-  { "organizationId": 2, "score": 1, "comment": "Иргэдийн саналыг тоодоггүй." },
-
-  { "organizationId": 3, "score": 5, "comment": "Аюулгүй байдлыг сайн хангаж байна." },
-  { "organizationId": 3, "score": 4, "comment": "Алба хаагчид илүү соёлтой болсон." },
-  { "organizationId": 3, "score": 3, "comment": "Зарим үед хариу удаан." },
-  { "organizationId": 3, "score": 2, "comment": "Хандлага муутай алба хаагч тааралддаг." },
-  { "organizationId": 3, "score": 1, "comment": "Гомдол бараг шийдэгддэггүй." },
-
-  { "organizationId": 4, "score": 5, "comment": "Эмнэлгийн орчин сайжирч байна." },
-  { "organizationId": 4, "score": 4, "comment": "Тоног төхөөрөмж шинэ болсон." },
-  { "organizationId": 4, "score": 3, "comment": "Хүлээлгийн хугацаа урт." },
-  { "organizationId": 4, "score": 2, "comment": "Ажилчдын тоо хүрэлцэхгүй." },
-  { "organizationId": 4, "score": 1, "comment": "Иргэдэд ээлтэй бус." },
-
-  { "organizationId": 5, "score": 5, "comment": "Боловсролын шинэчлэл амжилттай." },
-  { "organizationId": 5, "score": 4, "comment": "Сургалтын чанар дээшилсэн." },
-  { "organizationId": 5, "score": 3, "comment": "Сургалтын ачаалал их." },
-  { "organizationId": 5, "score": 2, "comment": "Орон нутагт дэмжлэг сул." },
-  { "organizationId": 5, "score": 1, "comment": "Бодлого тогтворгүй." },
-
-  { "organizationId": 6, "score": 5, "comment": "Аялал үнэхээр гоё болсон." },
-  { "organizationId": 6, "score": 4, "comment": "Зөвлөгөө маш сайн өгсөн." },
-  { "organizationId": 6, "score": 3, "comment": "Үнийн мэдээлэл тодорхой биш." },
-  { "organizationId": 6, "score": 2, "comment": "Холбоо барих төвөгтэй." },
-  { "organizationId": 6, "score": 1, "comment": "Захиалга гэнэт цуцалсан." },
-
-  { "organizationId": 7, "score": 5, "comment": "Найдвартай ханган нийлүүлэлттэй." },
-  { "organizationId": 7, "score": 4, "comment": "Аюулгүй ажиллагаа сайн." },
-  { "organizationId": 7, "score": 3, "comment": "Сайжруулах орон зай бий." },
-  { "organizationId": 7, "score": 2, "comment": "Хариу өгөх удаан." },
-  { "organizationId": 7, "score": 1, "comment": "Мэдээлэл хаалттай." },
-
-  { "organizationId": 8, "score": 5, "comment": "Дэлгүүр олон, тохилог." },
-  { "organizationId": 8, "score": 4, "comment": "Аюулгүй байдал сайн." },
-  { "organizationId": 8, "score": 3, "comment": "Зогсоол багтаамж муу." },
-  { "organizationId": 8, "score": 2, "comment": "Ажилтнуудын харилцаа тааруухан." },
-  { "organizationId": 8, "score": 1, "comment": "Цэвэрлэгээ хангалтгүй." },
-
-  { "organizationId": 9, "score": 5, "comment": "Маш мэргэжлийн баг." },
-  { "organizationId": 9, "score": 4, "comment": "Төслийг хугацаанд нь хийсэн." },
-  { "organizationId": 9, "score": 3, "comment": "Холболт заримдаа тасардаг." },
-  { "organizationId": 9, "score": 2, "comment": "Дэмжлэг сул." },
-  { "organizationId": 9, "score": 1, "comment": "Хариу их удаж ирдэг." },
-
-  { "organizationId": 10, "score": 5, "comment": "Үйлчилгээний чанар өндөр." },
-  { "organizationId": 10, "score": 4, "comment": "Сонголт өргөн." },
-  { "organizationId": 10, "score": 3, "comment": "Үнэ арай өндөр." },
-  { "organizationId": 10, "score": 2, "comment": "Зарим салбарын үйлчилгээ тааруу." },
-  { "organizationId": 10, "score": 1, "comment": "Үйлчилгээ тасалдсан." }
+  {
+    "organizationId": 1,
+    "score": 5,
+    "comment": "Замын чанар сайжирсан нь мэдрэгдэж байна."
+  },
+  {
+    "organizationId": 1,
+    "score": 4,
+    "comment": "Засварын ажлууд цагтаа хийгддэг болсон."
+  },
+  {
+    "organizationId": 1,
+    "score": 3,
+    "comment": "Мэдээлэл дутмаг санагдсан."
+  },
+  {
+    "organizationId": 1,
+    "score": 2,
+    "comment": "Гомдлын шийдвэр удаан байна."
+  },
+  {
+    "organizationId": 1,
+    "score": 1,
+    "comment": "Дуудлагад бараг хариулдаггүй."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Салбарын бодлого маш сайн тодорхойлогдсон."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Мэдээлэл ил тод болсон."
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Сайжруулах зүйл байсаар байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 2,
+    "comment": "Холбогдох байгууллагуудын уялдаа муу."
+  },
+  {
+    "organizationId": 3,
+    "score": 1,
+    "comment": "Иргэдийн саналыг тоодоггүй."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Үнэхээр гал цогтой, мундаг хамт олон."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Цагдаагийн ажилтнуудын үйл ажиллагаа хурдан, шуурхай байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Баярлалаа, цагдаа нар аа"
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Цагдаагийн үйлчилгээ ерөнхийдөө сайн, гэхдээ хариу өгөх хугацаа заримдаа удаан санагдлаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Мэргэжлийн хандлага ихэвчлэн сайн байгаа ч зарим үед мэдээлэл тодорхой бус байсан."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Холбоо барихад тэд маш эелдэг бөгөөд ойлгомжтой зөвлөгөө өгдөг."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Тэр ажлаа үнэхээр сайн хийдэг."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "БАярлалаа"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Амжилт хүсье"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Маш сайна"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Увс аймгийн цагдаагийн газрын алба хаагчид ард иргэдийнхээ аюулгүй байдлын төлөө сайн ажиллаж байгаа"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Тус цагдаагийн газрын алба хаагч нарын урьдчилан сэргийлэх ажил арга хэмжээ цаг үёэ. олсон ажил байдаг"
+  },
+  {
+    "organizationId": 3,
+    "score": 1,
+    "comment": "Нутгын бус хүмүүсд ширүүн улсууд юм аа асуудлыг заавал хүндрүүлж чирэгдэл их учруулж байна шүү"
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Би өглөө эрт ирэхэд жижүүр ажилчид намайг халуун дотноор угтсан."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Baihgui"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Аминсүлд хурдан түргэн миний асуудлын шийдэж өглөө баяраллаа. "
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Гомдол гаргахаар очсон хүмүүсийг дахин дахин явуулдаг. Үйлчилгээ нь маш удаан."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Сайн байна уу?"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": ""
+  },
+  {
+    "organizationId": 3,
+    "score": 2,
+    "comment": "Танай байгууллагын ажилтанын үйл ажиллагаа маш муу байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Инээмсэглэл."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Хурдан, шуурхай, ёс зүйтэй үйлчилгээ үзүүлсэнд баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 1,
+    "comment": "Дээрэлхүү харилцаатай бөгөөд \"яах гэж дуудлага өгсөн юм\", \"хүлээж бай\" гэх мэт хэллэгээр үл тоомсорлодог."
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Сайн."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Сайн байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Аюулгүй байдлыг хангаж өгсөнд баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Маш гоё."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Сайхан ааштай, яриа хөөрөөтэй."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Увс аймгийн цагдаагийн хэлтсийн угтах үйлчилгээний алба хаагчдын зан төлөв тааламжтай байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Сургалт сайхан байлаа, баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 1,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Баярлалаа"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Давгүй."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Сайн байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Нэг санал байна: насанд хүрээгүй хүүхдүүд машин унаж байна. Ямар ч хөдөлгөөний дүрэм мэддэггүй тул хойноос дагадаг. Аймгийн хулгайн замаар үргэлж эргүүл хиймээр байна. Увс аймаг."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Амжилт хүсье!"
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Маш гоё!"
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Сайн байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Цагдаагийн байгууллага сайн ажиллаж байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Мөрөөдлөө миний өмнө харуулсан нь их сонирхолтой санагдлаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Дэлгэрэнгүй тайлбарлаж өгсөнд баярлалаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Сайн байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Сайн байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 2,
+    "comment": null
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Маш сонирхолтой, сайхан санагдлаа."
+  },
+  {
+    "organizationId": 3,
+    "score": 5,
+    "comment": "Аюулгүй байдлыг сайн хангаж байна."
+  },
+  {
+    "organizationId": 3,
+    "score": 4,
+    "comment": "Алба хаагчид илүү соёлтой болсон."
+  },
+  {
+    "organizationId": 3,
+    "score": 3,
+    "comment": "Зарим үед хариу удаан."
+  },
+  {
+    "organizationId": 3,
+    "score": 2,
+    "comment": "Хандлага муутай алба хаагч тааралддаг."
+  },
+  {
+    "organizationId": 3,
+    "score": 1,
+    "comment": "Гомдол бараг шийдэгддэггүй."
+  },
+  {
+    "organizationId": 4,
+    "score": 5,
+    "comment": "Эмнэлгийн орчин сайжирч байна."
+  },
+  {
+    "organizationId": 4,
+    "score": 4,
+    "comment": "Тоног төхөөрөмж шинэ болсон."
+  },
+  {
+    "organizationId": 4,
+    "score": 3,
+    "comment": "Хүлээлгийн хугацаа урт."
+  },
+  {
+    "organizationId": 4,
+    "score": 2,
+    "comment": "Ажилчдын тоо хүрэлцэхгүй."
+  },
+  {
+    "organizationId": 4,
+    "score": 1,
+    "comment": "Иргэдэд ээлтэй бус."
+  },
+  {
+    "organizationId": 5,
+    "score": 5,
+    "comment": "Боловсролын шинэчлэл амжилттай."
+  },
+  {
+    "organizationId": 5,
+    "score": 4,
+    "comment": "Сургалтын чанар дээшилсэн."
+  },
+  {
+    "organizationId": 5,
+    "score": 3,
+    "comment": "Сургалтын ачаалал их."
+  },
+  {
+    "organizationId": 5,
+    "score": 2,
+    "comment": "Орон нутагт дэмжлэг сул."
+  },
+  {
+    "organizationId": 5,
+    "score": 1,
+    "comment": "Бодлого тогтворгүй."
+  },
+  {
+    "organizationId": 6,
+    "score": 5,
+    "comment": "Аялал үнэхээр гоё болсон."
+  },
+  {
+    "organizationId": 6,
+    "score": 4,
+    "comment": "Зөвлөгөө маш сайн өгсөн."
+  },
+  {
+    "organizationId": 6,
+    "score": 3,
+    "comment": "Үнийн мэдээлэл тодорхой биш."
+  },
+  {
+    "organizationId": 6,
+    "score": 2,
+    "comment": "Холбоо барих төвөгтэй."
+  },
+  {
+    "organizationId": 6,
+    "score": 1,
+    "comment": "Захиалга гэнэт цуцалсан."
+  },
+  {
+    "organizationId": 7,
+    "score": 5,
+    "comment": "Найдвартай ханган нийлүүлэлттэй."
+  },
+  {
+    "organizationId": 7,
+    "score": 4,
+    "comment": "Аюулгүй ажиллагаа сайн."
+  },
+  {
+    "organizationId": 7,
+    "score": 3,
+    "comment": "Сайжруулах орон зай бий."
+  },
+  {
+    "organizationId": 7,
+    "score": 2,
+    "comment": "Хариу өгөх удаан."
+  },
+  {
+    "organizationId": 7,
+    "score": 1,
+    "comment": "Мэдээлэл хаалттай."
+  },
+  {
+    "organizationId": 8,
+    "score": 5,
+    "comment": "Дэлгүүр олон, тохилог."
+  },
+  {
+    "organizationId": 8,
+    "score": 4,
+    "comment": "Аюулгүй байдал сайн."
+  },
+  {
+    "organizationId": 8,
+    "score": 3,
+    "comment": "Зогсоол багтаамж муу."
+  },
+  {
+    "organizationId": 8,
+    "score": 2,
+    "comment": "Ажилтнуудын харилцаа тааруухан."
+  },
+  {
+    "organizationId": 8,
+    "score": 1,
+    "comment": "Цэвэрлэгээ хангалтгүй."
+  },
+  {
+    "organizationId": 9,
+    "score": 5,
+    "comment": "Маш мэргэжлийн баг."
+  },
+  {
+    "organizationId": 9,
+    "score": 4,
+    "comment": "Төслийг хугацаанд нь хийсэн."
+  },
+  {
+    "organizationId": 9,
+    "score": 3,
+    "comment": "Холболт заримдаа тасардаг."
+  },
+  {
+    "organizationId": 9,
+    "score": 2,
+    "comment": "Дэмжлэг сул."
+  },
+  {
+    "organizationId": 9,
+    "score": 1,
+    "comment": "Хариу их удаж ирдэг."
+  },
+  {
+    "organizationId": 10,
+    "score": 5,
+    "comment": "Үйлчилгээний чанар өндөр."
+  },
+  {
+    "organizationId": 10,
+    "score": 4,
+    "comment": "Сонголт өргөн."
+  },
+  {
+    "organizationId": 10,
+    "score": 3,
+    "comment": "Үнэ арай өндөр."
+  },
+  {
+    "organizationId": 10,
+    "score": 2,
+    "comment": "Зарим салбарын үйлчилгээ тааруу."
+  },
+  {
+    "organizationId": 10,
+    "score": 1,
+    "comment": "Үйлчилгээ тасалдсан."
+  }
 ]

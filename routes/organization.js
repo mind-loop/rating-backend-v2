@@ -19,6 +19,7 @@ const {
   organizationRoleChange,
   getParamsAuthOrganizations,
   remvoveRoleChange,
+  resetPassword,
 } = require("../controller/organization");
 
 router.route("/").get(getOrganizations);
@@ -41,7 +42,8 @@ router
   .put(forgotPassword);
 router
   .route("/change-password")
-  .put(protect, changePassword);remvoveRoleChange
+  .put(protect, changePassword);
+router.route("/reset-password").put(protect, resetPassword);
 router
   .route("/controller-change")
   .put(protect,authorize("admin"), organizationRoleChange);
@@ -49,6 +51,6 @@ router
   .route("/remove-controller")
   .put(protect,authorize("admin"), remvoveRoleChange);
 router
-  .route("/:id")
+  .route("/delete/:id")
   .delete(protect, removeOrganization);
 module.exports = router;

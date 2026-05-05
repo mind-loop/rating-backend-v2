@@ -10,6 +10,7 @@ const asyncHandler = require("../middleware/asyncHandle");
 const { Sequelize } = require("sequelize");
 const {
   analyzeOrganizations,
+  analyzeOrganizationsBatch,
 } = require("../middleware/ai");
 exports.getOrganizations = asyncHandler(async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
@@ -451,7 +452,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     body: { success: true },
   });
 });
-
+// Нууц үг өөрчлөх
 exports.changePassword = asyncHandler(async (req, res, next) => {
   const id = req.userId;
   if (!id) {
@@ -501,6 +502,67 @@ exports.changePassword = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Таны нууц үг амжилттай шинэчлэгдлээ",
     body: { success: true },
+  });
+});
+
+// Админ байгууллагын нууц үгийг өөрчлөх
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new MyError("Бүртгэлтэй имэйл хаягаа оруулна уу!", 400);
+  }
+
+  // 1. Байгууллагыг имэйл хаягаар нь хайж олох
+  const organization = await req.db.organization.findOne({
+    where: { email: email }
+  });
+
+  if (!organization) {
+    throw new MyError("Энэ имэйл хаяг дээр бүртгэлтэй байгууллага олдсонгүй!", 404);
+  }
+
+  // 2. Санамсаргүй 6 оронтой нууц үг үүсгэх (Жишээ: 482930)
+  const newRawPassword = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // 3. Шинэ нууц үгийг хэшлэх
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newRawPassword, salt);
+
+  // 4. Өгөгдлийн санд шинэчилж хадгалах
+  await req.db.organization.update(
+    { password: hashedPassword },
+    { where: { id: organization.id } }
+  );
+
+  // 5. Шинэ нууц үгийг имэйлээр илгээх
+  const emailBody = {
+    title: "Нууц үг сэргээх хүсэлт",
+    label: `Таны нэвтрэх түр нууц үг амжилттай сэргээгдлээ. <br/>
+            <div style="margin-top: 15px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+              <p style="margin: 5px 0;">Нэвтрэх имэйл: <strong>${organization.email}</strong></p>
+              <p style="margin: 5px 0;">Шинэ түр нууц үг: <strong style="font-size: 20px; color: #228be6;">${newRawPassword}</strong></p>
+            </div>
+            <p style="margin-top: 15px; font-size: 13px; color: #868e96;">
+              ⚠️ Та системд нэвтэрснийхээ дараа "Тохиргоо" хэсгээр орж нууц үгээ солихыг зөвлөж байна.
+            </p>`,
+    email: organization.email,
+    from: "Системийн Админ",
+    buttonText: "Нэвтрэх хэсэг рүү очих",
+    buttonUrl: 'https://dashboard.qr-unelgee.mn/',
+    greeting: `Сайн байна уу? ${organization.business_name}`,
+  };
+
+  await sendHtmlEmail({ ...emailBody });
+
+  // 6. Амжилттай хариу буцаах (Хөгжүүлэлтийн явцад шалгах зорилгоор body-д буцаав)
+  res.status(200).json({
+    body: {
+      success: true,
+      message: `Шинэ нууц үгийг ${organization.email} имэйл хаяг руу илгээлээ. `,
+      email: organization.email,
+      temporaryPassword: newRawPassword,
+    },
   });
 });
 
@@ -581,8 +643,8 @@ exports.callBackExpireDue = asyncHandler(async (req, res, next) => {
 });
 exports.callBackAiAnalyzeCount = asyncHandler(async (req, res, next) => {
   const organizationId = req.params.id;
-  const { integrationId, ai_analize_count , uniq_generate_id} = req.query;
-  
+  const { integrationId, ai_analize_count, uniq_generate_id } = req.query;
+
   if (!uniq_generate_id) {
     throw new MyError("uniq_generate_id заавал шаардлагатай", 400);
   }
@@ -634,21 +696,21 @@ exports.getAuthOrganizationAnalytics = asyncHandler(async (req, res) => {
         required: false,
         ...(startDate || endDate
           ? {
-              where: {
-                ...(startDate && {
-                  createdAt: { [Op.gte]: new Date(startDate) },
-                }),
-                ...(endDate && { createdAt: { [Op.lte]: new Date(endDate) } }),
-              },
-            }
+            where: {
+              ...(startDate && {
+                createdAt: { [Op.gte]: new Date(startDate) },
+              }),
+              ...(endDate && { createdAt: { [Op.lte]: new Date(endDate) } }),
+            },
+          }
           : {}),
       },
     ],
   });
-  const responseData = await analyzeOrganizations(organizations);
+  const responseData = await analyzeOrganizationsBatch(organizations);
   res.status(200).json({
     message: "Success",
-    body: { items: responseData },
+    body: { items: responseData, orgData: organizations },
   });
 });
 

@@ -8,29 +8,43 @@ const client = new OpenAI({
     timeout: 45000, // 45 секунд хүлээгээд хариу ирэхгүй бол цуцална
 });
 
-const MODEL = "gpt-5-mini";
+const MODEL = "gpt-4o-mini";
 
 /**
- * Сэтгэгдлийг засаж, эцсийн ганц текст буцаах
+ * Сэтгэгдлийг ёс зүйн дагуу засварлаж, хувь хүний нууцыг хамгаалах
  */
 exports.generateFinalText = async (userText) => {
-    if (!userText) throw new Error("userText хоосон байна.");
+    if (!userText || userText.trim().length === 0) return "";
 
     const response = await client.chat.completions.create({
         model: MODEL,
         messages: [
             {
                 role: "system",
-                content: `Дараах сэтгэгдлийг ёс зүйг зөрчөөгүй, утга зүйн алдаагүй, цэвэр найруулгатай нэг эцсийн текст болгон зас.
-Сөрөг эсвэл шүүмжлэлтэй үед тухайн алба хаагч буюу хүний нэрийг ерөнхий нэршлээр (жишээ нь: ажилтан, алба хаагч) сольж нууцална уу.
-Харин эерэг, талархлын сэтгэгдэл дээрх хүний нэрийг хэвээр үлдээж болно.
-Тайлбар бичихгүй, зөвхөн эцсийн текстийг буцаа.`,
+                content: `Та бол мэргэжлийн сэтгэгдэл хянагч. Таны зорилго бол бүдүүлэг сэтгэгдлийг соёлтой болгох, хүний нэрийг нууцлах юм.
+                
+                ДҮРЭМ:
+                1. Хараал болон ёс бус үгсийг шууд устгаж, утгыг нь соёлтой шүүмжлэл болгох.
+                2. Сэтгэгдэл сөрөг (муулсан, шүүмжилсэн) бол хүний нэрийг "ажилтан" эсвэл "алба хаагч" гэж заавал солих.
+                3. Зөвхөн зассан текстийг буцаа.
+                4. Хэрэв сэтгэгдэл зөвхөн эерэг (магтсан, талархсан) бол текстийг өөрчлөхгүйгээр буцаа.
+                
+                ЖИШЭЭ:
+                - Input: "Танай ажилтан Батмөнх хог юм байна Пиздаа."
+                - Output: "Танай ажилтан үүргээ хангалтгүй биелүүлж байна."
+                
+                - Input: "Энэ Долгор гэдэг хүн ёстой бүтэхгүй гөлөг байна."
+                - Output: "Энэ ажилтан харилцааны соёлгүй байна."
+                
+                - Input: "Бат-Эрдэнэ ахдаа маш их баярлалаа, сайн тусаллаа."
+                - Output: "Бат-Эрдэнэ ахдаа маш их баярлалаа, сайн тусаллаа."`
             },
             { role: "user", content: userText },
         ],
+        temperature: 0.1, // Бүр багасгаж, AI-ийн "дураараа" байдлыг хаалаа
     });
 
-    return response.choices[0].message.content;
+    return response.choices[0].message.content.trim();
 };
 
 /**
@@ -39,51 +53,83 @@ exports.generateFinalText = async (userText) => {
 exports.generateRateAnalyze = async (ratings) => {
     if (!ratings || !ratings.length) return { advice: "Үнэлгээ байхгүй байна." };
 
+    // Датаг товчилж token хэмнэнэ (S: оноо, C: сэтгэгдэл)
     const summaryText = ratings
-        .slice(0, 30) // Timeout-оос сэргийлж хамгийн сүүлийн 30 сэтгэгдлийг авна
-        .map((r) => `Score: ${r.score}, Comment: ${r.comment}`)
+        .map((r) => `S:${r.score}, C:${r.comment}`)
         .join("\n");
 
     const prompt = `
-Доорх байгууллагуудын үнэлгээ, сэтгэгдэлд үндэслэн нөхцөл байдлын дүгнэлт гарга. 
-**Үр дүнг яг доорх JSON бүтэцтэйгээр буцаа (ямар ч нэмэлт текст, тайлбар, тэмдэг оруулахгүй):**
+Та бол байгууллагын стратеги төлөвлөлтийн зөвлөх, ахлах бизнес аналитикч хүн. 
+Доорх өгөгдөлд (S: оноо, C: сэтгэгдэл) үндэслэн гүйцэтгэх удирдлагын багт зориулсан стратеги шинжилгээний тайлан гарга.
 
-  {
-    "organizationId": number,
-    "organizationName": string,
-    "summary": string,
-    "averageScore": number,
-    "totalRatings": number,
-    "positiveComments": number,
-    "negativeComments": number,
-    "keyIssues": [string],
-    "highPriority": [string],
-    "topComments": [string]
-  }
+**Шинжилгээ хийхдээ дараах зүйлсийг анхаар:**
+1. **summary**: Удирдлагын хураангуй (Executive Summary). Үйлчилгээний ерөнхий соёл, чиг хандлага, давуу тал болон алдагдаж буй боломжуудыг мэргэжлийн хэллэгээр тайлбарлах.
+2. **keyIssues**: Хэрэглэгчдийн сэтгэл ханамжид хамгийн их сөргөөр нөлөөлж буй "системийн шинжтэй" гол асуудлууд (Pain points).
+3. **highPriority**: Нэн даруй анхаарал хандуулах шаардлагатай, эрсдэл дагуулж буй цэгүүд.
+4. **proposedActions**: Оновчтой, бодитой хэрэгжүүлж болох 3-5 ажил (Жишээ нь: Процесс сайжруулах, дотоод сургалт орох, технологийн шинэчлэл хийх).
+5. **customerSentimentScore**: Хэрэглэгчийн сэтгэл хөдлөлийн индекс (0-100%). Энэ нь сэтгэгдлүүдийн агуулгад дүн шинжилгээ хийсэн хандлагын үзүүлэлт юм.
+6. **topComments**: Байгууллагын дүр төрхийг хамгийн сайн тодорхойлох 3-5 чухал сэтгэгдэл.
 
-*Анхаар: Шүүмжлэлтэй сэтгэгдэл дээрх алба хаагчдын нэрийг 'ажилтан' эсвэл 'алба хаагч' гэж ерөнхийлж оруулна уу. Эерэг сэтгэгдэл дээрх нэрийг хэвээр үлдээж болно.
-Мэдээлэл:
+**Өгөгдөл:**
 ${summaryText}
+
+**JSON бүтэц:**
+{
+  "organizationId": number,
+  "organizationName": "string",
+  "summary": "string", 
+  "averageScore": number,
+  "totalRatings": number,
+  "positiveComments": number,
+  "negativeComments": number,
+  "customerSentimentScore": "0-100%", 
+  "keyIssues": ["string"],
+  "highPriority": ["string"],
+  "proposedActions": ["string"],
+  "topComments": ["string"]
+}
+
+**Дүрмүүд:**
+- Зөвхөн JSON буцаа. Нэмэлт тайлбар, тэмдэгт оруулахгүй.
+- Сөрөг сэтгэгдэл дээрх хүний нэрийг 'ажилтан' эсвэл 'алба хаагч' гэж ерөнхийлөх.
+- Дүгнэлтүүд нь маш ажил хэрэгч, шийдвэр гаргахад чиглэсэн байх.
 `;
 
-    const response = await client.chat.completions.create({
-        model: MODEL,
-        response_format: { type: "json_object" }, // JSON Mode идэвхжүүлэв
-        messages: [
-            {
-                role: "system",
-                content: "Та байгууллагын үнэлгээний сэтгэгдлийг шинжилж зөвлөмж гаргана. JSON format-д буцаана.",
-            },
-            { role: "user", content: prompt },
-        ],
-    });
-
-    const aiText = response.choices?.[0]?.message?.content || "";
-
     try {
-        return JSON.parse(aiText);
+        const response = await client.chat.completions.create({
+            model: "gpt-4o-mini", // Хурдан бөгөөд ухаалаг
+            response_format: { type: "json_object" },
+            temperature: 0, // Хариуг илүү тогтвортой, үнэн зөв болгоно
+            messages: [
+                {
+                    role: "system",
+                    content: "Та бол өгөгдсөн JSON бүтцийн дагуу үр дүнг гаргадаг дата аналитикч.",
+                },
+                { role: "user", content: prompt },
+            ],
+        });
+
+        const result = JSON.parse(response.choices[0].message.content);
+        
+        // Хэрэв зарим талбар дутуу ирвэл алдаа гарахаас сэргийлж default утга оноох
+        return {
+            organizationId: result.organizationId || 0,
+            organizationName: result.organizationName || "",
+            summary: result.summary || "",
+            averageScore: result.averageScore || 0,
+            totalRatings: ratings.length,
+            positiveComments: result.positiveComments || 0,
+            negativeComments: result.negativeComments || 0,
+            keyIssues: result.keyIssues || [],
+            highPriority: result.highPriority || [],
+            topComments: result.topComments || [],
+            proposedActions: result.proposedActions || [],
+            customerSentimentScore: result.customerSentimentScore || "0%",
+
+        };
     } catch (err) {
-        return { advice: aiText || "AI дүгнэлт гаргах боломжгүй байна." };
+        console.error("AI Error:", err);
+        throw new Error("AI анализ хийхэд алдаа гарлаа: " + err.message);
     }
 };
 
@@ -107,5 +153,81 @@ exports.analyzeOrganizations = async (orgs) => {
     } catch (err) {
         console.error("Алдаа гарлаа:", err);
         return [{ error: "Боловсруулалтад алдаа гарлаа" }];
+    }
+};
+/**
+ * Олон байгууллагыг нэгтгэж, нэг хүсэлтээр шинжлэх (Optimized Batch Mode)
+ */
+exports.analyzeOrganizationsBatch = async (orgs) => {
+    if (!orgs || orgs.length === 0) return [];
+
+    const orgsWithRatings = orgs.filter(org => org.ratings && org.ratings.length > 0);
+    const orgsWithoutRatings = orgs.filter(org => !org.ratings || org.ratings.length === 0);
+
+    const emptyResults = orgsWithoutRatings.map(org => ({
+        organizationId: org.id,
+        organizationName: org.business_name,
+        summary: "Энэ хугацаанд үнэлгээ бүртгэгдээгүй байна.",
+        averageScore: 0,
+        totalRatings: 0,
+        customerSentimentScore: "0%",
+        keyIssues: [],
+        proposedActions: ["Үйлчлүүлэгчдийг үнэлгээ өгөхийг уриалах"]
+    }));
+
+    if (orgsWithRatings.length === 0) return emptyResults;
+
+    const allOrgsData = orgsWithRatings.map(org => {
+        const ratingsSummary = org.ratings
+            .map(r => `S:${r.score}, C:${r.comment || 'N/A'}`)
+            .join(" | ");
+        return `ID:${org.id}, Name:${org.business_name}, Data:[${ratingsSummary}]`;
+    }).join("\n---\n");
+
+    const prompt = `
+Та бол ахлах аналитикч. Өгөгдсөн байгууллагуудын үнэлгээг шинжилж, тус бүрт нь стратеги дүгнэлт гарга.
+Хариуг заавал "results" гэсэн түлхүүр үгтэй JSON объект дотор массив хэлбэрээр ирүүл.
+
+**Өгөгдөл:**
+${allOrgsData}
+
+**Хүлээгдэж буй JSON бүтэц:**
+{
+  "results": [
+    {
+      "organizationId": number,
+      "organizationName": "string",
+      "summary": "string",
+      "averageScore": number,
+      "totalRatings": number,
+      "customerSentimentScore": "0-100%",
+      "keyIssues": ["string"],
+      "proposedActions": ["string"]
+    }
+  ]
+}
+`;
+
+    try {
+        const response = await client.chat.completions.create({
+            model: MODEL,
+            response_format: { type: "json_object" }, // Энэ нь заавал {} байхыг шаардана
+            temperature: 0,
+            messages: [
+                { role: "system", content: "Та өгөгдсөн бүтцээр зөвхөн JSON буцаадаг аналитикч." },
+                { role: "user", content: prompt }
+            ],
+        });
+
+        const content = response.choices[0].message.content;
+        const parsed = JSON.parse(content);
+        
+        // AI-аас ирсэн "results" массивыг авах
+        const aiResults = parsed.results || [];
+
+        return [...aiResults, ...emptyResults];
+    } catch (err) {
+        console.error("Batch Analysis Error:", err);
+        return emptyResults; // Алдаа гарвал хоосон үр дүнгүүдээ л буцаана
     }
 };
