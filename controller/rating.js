@@ -46,12 +46,6 @@ exports.getOrganizationsRate = asyncHandler(async (req, res, next) => {
 exports.getOrganizationRate = asyncHandler(async (req, res, next) => {
   const { role } = req;
   const organizationId = req.params.id;
-
-  // Role шалгах логикийг зассан: Хэрэв admin болон user-ийн аль нь ч биш бол алдаа шиднэ
-  if (role !== "admin" && role !== "user") {
-    throw new MyError("Хандах эрхгүй эсвэл шүүлтүүр олдсонгүй", 403);
-  }
-
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 1000;
   const sort = req.query.sort;
