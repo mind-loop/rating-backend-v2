@@ -679,7 +679,7 @@ exports.callBackAiAnalyzeCount = asyncHandler(async (req, res, next) => {
   });
 });
 exports.getAuthOrganizationAnalytics = asyncHandler(async (req, res) => {
-  const { organizationIds, startDate, endDate } = req.body;
+  const { organizationIds, startDate, endDate, purpose } = req.body;
   const { role } = req; // middleware-аар авсан user объект
   if (!role) {
     throw new MyError("Та эрхгүй байна", 403);
@@ -707,7 +707,7 @@ exports.getAuthOrganizationAnalytics = asyncHandler(async (req, res) => {
       },
     ],
   });
-  const responseData = await analyzeOrganizationsBatch(organizations);
+  const responseData = await analyzeOrganizationsBatch(organizations, purpose || null);
   res.status(200).json({
     message: "Success",
     body: { items: responseData, orgData: organizations },

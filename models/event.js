@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes) {
-  const Rating = sequelize.define(
-    "ratings",
+  const Event = sequelize.define(
+    "events",
     {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -18,28 +18,25 @@ module.exports = function (sequelize, DataTypes) {
         },
       },
 
-      score: {
-        type: DataTypes.INTEGER,
+      name: {
+        type: DataTypes.STRING(255),
         allowNull: false,
-        validate: {
-          min: 1,
-          max: 5,
-        },
       },
 
-      comment: {
+      description: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
 
-      eventId: {
-        type: DataTypes.INTEGER.UNSIGNED,
+      eventDate: {
+        type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: null,
-        references: {
-          model: "events",
-          key: "id",
-        },
+      },
+
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
       },
 
       createdAt: {
@@ -55,10 +52,10 @@ module.exports = function (sequelize, DataTypes) {
       },
     },
     {
-      tableName: "ratings",
+      tableName: "events",
       timestamps: true,
     }
   );
 
-  return Rating;
+  return Event;
 };

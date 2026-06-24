@@ -27,6 +27,7 @@ const sequelize = new Sequelize(
 const models = [
   require("../models/users"),
   require("../models/organization"),
+  require("../models/event"),
   require("../models/rating"),
   require("../models/invoice"),
   require("../models/merchant")

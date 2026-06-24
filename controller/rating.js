@@ -99,7 +99,7 @@ exports.getOrganizationRate = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAnalyzeRate = asyncHandler(async (req, res, next) => {
-  const { ratings } = req.body;
+  const { ratings, purpose } = req.body;
   const organizationId = req.params.id;
   if (ratings.length === 0) {
     throw new MyError("Ratings not found", 404);
@@ -120,7 +120,7 @@ exports.getAnalyzeRate = asyncHandler(async (req, res, next) => {
   organization.ai_analize_count -= 1;
   await organization.save();
   try {
-    const analysis = await generateRateAnalyze(ratings);
+    const analysis = await generateRateAnalyze(ratings, purpose || null);
     res.status(200).json({
       success: true,
       body: analysis
